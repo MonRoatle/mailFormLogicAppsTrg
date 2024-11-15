@@ -39,7 +39,12 @@
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            return response.json();  // 正常なJSONレスポンスを処理
+
+            // レスポンスの内容をコンソールに出力
+            console.log("Response Text:", response.text());
+
+            // JSONレスポンスを処理
+            return response.json();
         })
         .then(data => {
             console.log("Success:", data);
