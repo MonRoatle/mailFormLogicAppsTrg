@@ -11,10 +11,16 @@
         // 入力されたメールアドレスを取得
         const recipientEmail = document.getElementById("email").value;
 
+        // 入力が空でないか確認
+        if (!recipientEmail) {
+            alert("Please enter a recipient email address.");
+            return;
+        }
+
         // HTTPリクエストのボディ
         const requestBody = {
             recipientEmail: recipientEmail,
-            // 必要に応じて、他の情報もここに追加可能
+            // 必要に応じて他の情報もここに追加可能
         };
 
         // Azure Logic Apps エンドポイントURL
@@ -28,13 +34,20 @@
             },
             body: JSON.stringify(requestBody),
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Success:", data);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
+        .then(response => {
+            // レスポンスが正常か確認
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();  // 正常なJSONレスポンスを処理
+        })
+        .then(data => {
+            console.log("Success:", data);
+            alert("Email has been sent successfully!");
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("There was an error sending the email.");
+        });
     });
-
 </script>
