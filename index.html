@@ -1,41 +1,40 @@
 <form id="emailForm">
-    <label for="toEmail">Recipient Email:</label>
-    <input type="email" id="toEmail" name="toEmail" placeholder="Enter recipient email" required />
+    <label for="email">Recipient Email:</label>
+    <input type="email" id="email" name="recipientEmail" required>
     <button type="submit">Send Email</button>
-  </form>
-  
-  <script>
-    document.getElementById("emailForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    
-    // 入力されたメールアドレスを取得
-    const recipientEmail = document.getElementById("email").value;
+</form>
 
-    // HTTPリクエストのボディ
-    const requestBody = {
-        recipientEmail: recipientEmail,
-        // 必要に応じて、他の情報もここに追加可能
-    };
+<script>
+    document.getElementById("emailForm").addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    // Azure Logic Apps エンドポイントURL
-    const logicAppUrl = "https://prod-29.japaneast.logic.azure.com:443/workflows/f3e3249e034b42b7853d540ae9f87652/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=hbhEz7g4uXDVyjroFstX02tgbmGRYdYnm1x8YIpRnBU";
+        // 入力されたメールアドレスを取得
+        const recipientEmail = document.getElementById("email").value;
 
-    // リクエストを送信
-    fetch(logicAppUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Success:", data);
-    })
-    .catch(error => {
-        console.error("Error:", error);
+        // HTTPリクエストのボディ
+        const requestBody = {
+            recipientEmail: recipientEmail,
+            // 必要に応じて、他の情報もここに追加可能
+        };
+
+        // Azure Logic Apps エンドポイントURL
+        const logicAppUrl = "https://prod-29.japaneast.logic.azure.com:443/workflows/f3e3249e034b42b7853d540ae9f87652/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=hbhEz7g4uXDVyjroFstX02tgbmGRYdYnm1x8YIpRnBU";
+
+        // リクエストを送信
+        fetch(logicAppUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Success:", data);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
     });
-});
 
-  </script>
-  
+</script>
