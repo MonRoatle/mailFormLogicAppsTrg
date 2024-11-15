@@ -10,7 +10,6 @@
 
         // 入力されたメールアドレスを取得
         const recipientEmail = document.getElementById("email").value;
-        console.log(recipientEmail);
 
         // 入力が空でないか確認
         if (!recipientEmail) {
@@ -41,10 +40,17 @@
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-            // レスポンスの内容を直接JSONとして解析
-            return response.json();  // 一度だけ呼び出す
+            // レスポンスの内容をtextとしてまず取得
+            return response.text();  // JSONをそのまま読み込む前に確認
         })
-        .then(data => {
+        .then(text => {
+            // レスポンスが空でないかを確認
+            if (!text) {
+                throw new Error("Response body is empty");
+            }
+
+            // レスポンスがJSON形式であることを確認し、パース
+            const data = JSON.parse(text);
             console.log("Success:", data);
             alert("Email has been sent successfully!");
         })
