@@ -20,7 +20,6 @@
         // HTTPリクエストのボディ
         const requestBody = {
             recipientEmail: recipientEmail,
-            // 必要に応じて他の情報もここに追加可能
         };
 
         // Azure Logic Apps エンドポイントURL
@@ -35,24 +34,18 @@
             body: JSON.stringify(requestBody),
         })
         .then(response => {
-            // レスポンスが正常か確認
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-
-            // レスポンスの内容をtextとしてまず取得
-            return response.text();  // JSONをそのまま読み込む前に確認
+            return response.text(); // レスポンスボディを確認
         })
         .then(text => {
-            // レスポンスが空でないかを確認
             if (!text) {
                 throw new Error("Response body is empty");
             }
-
-            // レスポンスがJSON形式であることを確認し、パース
             const data = JSON.parse(text);
             console.log("Success:", data);
-            alert("Email has been sent successfully!");
+            alert(`Email sent successfully to ${data.recipientEmail}`);
         })
         .catch(error => {
             console.error("Error:", error);
