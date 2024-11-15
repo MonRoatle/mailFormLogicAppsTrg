@@ -40,11 +40,8 @@
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
-            // レスポンスの内容をコンソールに出力
-            console.log("Response Text:", response.text());
-
-            // JSONレスポンスを処理
-            return response.json();
+            // レスポンスの内容を直接JSONとして解析
+            return response.json();  // 一度だけ呼び出す
         })
         .then(data => {
             console.log("Success:", data);
