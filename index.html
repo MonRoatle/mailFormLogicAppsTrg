@@ -1,55 +1,24 @@
 <form id="emailForm">
-    <label for="email">Recipient Email:</label>
-    <input type="email" id="email" name="recipientEmail" required>
-    <button type="submit">Send Email</button>
-</form>
-
-<script>
-    document.getElementById("emailForm").addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        // 入力されたメールアドレスを取得
-        const recipientEmail = document.getElementById("email").value;
-
-        // 入力が空でないか確認
-        if (!recipientEmail) {
-            alert("Please enter a recipient email address.");
-            return;
-        }
-
-        // HTTPリクエストのボディ
-        const requestBody = {
-            recipientEmail: recipientEmail,
-        };
-
-        // Azure Logic Apps エンドポイントURL
-        const logicAppUrl = "https://prod-29.japaneast.logic.azure.com:443/workflows/f3e3249e034b42b7853d540ae9f87652/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=hbhEz7g4uXDVyjroFstX02tgbmGRYdYnm1x8YIpRnBU";
-
-        // リクエストを送信
-        fetch(logicAppUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.text(); // レスポンスボディを確認
-        })
-        .then(text => {
-            if (!text) {
-                throw new Error("Response body is empty");
-            }
-            const data = JSON.parse(text);
-            console.log("Success:", data);
-            alert(`Email sent successfully to ${data.recipientEmail}`);
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("There was an error sending the email.");
-        });
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <button type="submit">Send</button>
+  </form>
+  <script>
+    document.getElementById('emailForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+  
+      const response = await fetch('https://prod-29.japaneast.logic.azure.com:443/workflows/f3e3249e034b42b7853d540ae9f87652/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=hbhEz7g4uXDVyjroFstX02tgbmGRYdYnm1x8YIpRnBU', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+  
+      if (response.ok) {
+        alert('Email sent successfully!');
+      } else {
+        alert('Failed to send email.');
+      }
     });
-</script>
+  </script>
+  
